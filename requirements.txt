@@ -1,0 +1,4 @@
+boto3
+Python-dotenv
+Flask==2.3.3
+Werkzeug==2.3.7
