@@ -26,6 +26,26 @@ An intelligent insurance claims processing system built as part of AWS AI Profes
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
+### Mermaid Diagram
+
+```mermaid
+flowchart LR
+    A[Browser<br/>index.html] -->|Upload| B(Flask API<br/>web/app.py)
+    B -->|POST /upload| S1[(S3<br/>claims/)]
+    A -->|Process| B
+    B -->|POST /process| P[src/app.py:43<br/>process_claim_document]
+    P -->|Read claim| S1
+    P -->|Load policies| S2[(S3<br/>policies/)]
+    P -->|Invoke Extract| M1[Bedrock<br/>Claude 3 Haiku]
+    P -->|RAG match| R[src/rag.py:16]
+    P -->|Invoke Summary| M2[Bedrock<br/>Claude 3 Haiku]
+    P -->|Write result| S3[(S3<br/>outputs/)]
+    A -->|View Outputs| B
+    B -->|GET /outputs| S3
+    A -->|Download Output| B
+    B -->|GET /download/<key>| S3
+```
+
 ### Core Components
 
 1. **Document Ingestion**
